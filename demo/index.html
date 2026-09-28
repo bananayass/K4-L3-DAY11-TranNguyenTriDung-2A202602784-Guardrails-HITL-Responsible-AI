@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102b31">
+    <meta name="description" content="Giao diện xem bằng chứng lab guardrails, quyết định của tác nhân và kết quả red team VinBank ngày 11.">
+    <title>VinBank · Bảng điều khiển Guardrails</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="Về đầu trang demo VinBank">
+          <span class="brand-mark" aria-hidden="true"><span>V</span><span>B</span></span>
+          <span class="brand-copy"><strong>VinBank</strong><small>BÀI LAB · NGÀY 11</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Các mục trên trang">
+          <a href="#trace">Luồng quyết định</a>
+          <a href="#attacks">Red team</a>
+          <a href="#evidence">Bằng chứng</a>
+          <a href="../chat/">Phòng chat thử</a>
+        </nav>
+        <span class="header-tag">BẢN DEMO CỤC BỘ</span>
+      </header>
+
+      <main id="main">
+        <section class="hero" id="top" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> BẢO MẬT TÁC NHÂN AI / K4 · L3</p>
+            <h1 id="hero-title">Mỗi câu trả lời đều đi qua <em>một lớp bảo vệ.</em></h1>
+            <p class="hero-description">Theo dõi yêu cầu ngân hàng từ lúc kiểm tra đầu vào đến khi lưu kết quả. Sau đó so sánh Red và Red Advance trong lần chạy lab gần nhất.</p>
+            <div class="hero-actions">
+              <a class="primary-link" href="#trace">Xem một quyết định <span aria-hidden="true">↗</span></a>
+              <a class="primary-link" href="../chat/">Thử input trong chat <span aria-hidden="true">↗</span></a>
+              <span class="hero-note">Đọc bằng chứng trong thư mục <code>outputs/</code></span>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Bốn bước trong luồng bảo vệ">
+            <div class="visual-topline"><span>LUỒNG YÊU CẦU</span><span class="pulse-dot" aria-hidden="true"></span><span>CÓ THỂ KIỂM TRA</span></div>
+            <div class="flow-orbit" aria-hidden="true">
+              <div class="orbit-ring orbit-ring-outer"></div>
+              <div class="orbit-ring orbit-ring-inner"></div>
+              <div class="orbit-core"><span>VB</span><small>LỚP<br>BẢO VỆ</small></div>
+              <span class="orbit-node node-one">01 <b>ĐẦU VÀO</b></span>
+              <span class="orbit-node node-two">02 <b>MÔ HÌNH</b></span>
+              <span class="orbit-node node-three">03 <b>ĐẦU RA</b></span>
+              <span class="orbit-node node-four">04 <b>NHẬT KÝ</b></span>
+            </div>
+            <div class="visual-footer"><span>NGUỒN CHƯA TIN CẬY</span><span aria-hidden="true">→</span><span>PHẢN HỒI ĐÃ KIỂM TRA</span></div>
+          </div>
+        </section>
+
+        <section class="evidence-strip reveal-on-scroll" aria-label="Trạng thái lab hiện tại">
+          <div class="strip-heading"><span class="section-index">TÓM TẮT LẦN CHẠY</span><p id="load-status" role="status">Đang tải artifact cục bộ…</p></div>
+          <div class="strip-metrics">
+            <div class="strip-metric"><span id="safe-count" class="metric-number">—</span><span>CÂU HỎI AN TOÀN<br>ĐƯỢC CHO QUA</span></div>
+            <div class="strip-metric"><span id="blocked-count" class="metric-number">—</span><span>YÊU CẦU TẤN CÔNG<br>BỊ CHẶN</span></div>
+            <div class="strip-metric"><span id="red-count" class="metric-number">—</span><span>RED<br>LẦN LỘ</span></div>
+            <div class="strip-metric"><span id="advance-count" class="metric-number">—</span><span>RED ADVANCE<br>LẦN LỘ</span></div>
+          </div>
+        </section>
+
+        <section class="content-section trace-section reveal-on-scroll" id="trace" aria-labelledby="trace-title">
+          <div class="section-heading">
+          <div><p class="section-index">01 / LUỒNG GUARDRAIL</p><h2 id="trace-title">Lần theo một quyết định</h2></div>
+            <p>Chọn một tình huống CP3 để xem yêu cầu bị chặn ở đâu hoặc đi tiếp qua các bước nào.</p>
+          </div>
+          <div class="trace-layout">
+            <div class="control-panel">
+              <label for="scenario-select">Tình huống đã ghi</label>
+              <div class="select-wrap"><select id="scenario-select" disabled><option>Tải kết quả để chọn tình huống</option></select></div>
+              <button class="trace-button" id="trace-button" type="button" disabled>Xem luồng xử lý <span aria-hidden="true">→</span></button>
+              <div class="request-preview"><span class="small-label">TRÍCH ĐOẠN YÊU CẦU</span><p id="request-text">Chưa có tình huống nào được tải.</p></div>
+              <p class="control-footnote">Luồng này trình bày kết quả đã ghi. Giao diện không gọi mô hình và không thực hiện giao dịch.</p>
+            </div>
+            <div class="pipeline-panel">
+              <div class="panel-topline"><span>ĐƯỜNG ĐI CỦA YÊU CẦU</span><span id="scenario-outcome" class="outcome-pill neutral">ĐANG CHỜ DỮ LIỆU</span></div>
+              <ol class="pipeline-list" id="pipeline-list">
+                <li data-stage="request"><span class="stage-index">01</span><span class="stage-body"><strong>Đã nhận yêu cầu</strong><small>Câu hỏi ngân hàng hoặc dữ liệu chưa tin cậy</small></span><span class="stage-state">—</span></li>
+                <li data-stage="input"><span class="stage-index">02</span><span class="stage-body"><strong>Guardrail đầu vào</strong><small>Kiểm tra chủ đề và prompt injection</small></span><span class="stage-state">—</span></li>
+                <li data-stage="model"><span class="stage-index">03</span><span class="stage-body"><strong>Tác nhân Blue</strong><small>Mô hình OpenRouter được khóa</small></span><span class="stage-state">—</span></li>
+                <li data-stage="output"><span class="stage-index">04</span><span class="stage-body"><strong>Guardrail đầu ra</strong><small>Kiểm tra độ an toàn của phản hồi</small></span><span class="stage-state">—</span></li>
+                <li data-stage="record"><span class="stage-index">05</span><span class="stage-body"><strong>Kết quả đã lưu</strong><small>Trong results.json</small></span><span class="stage-state">—</span></li>
+              </ol>
+              <p class="trace-explanation" id="trace-explanation">Chọn tình huống để xem kết quả.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section attacks-section reveal-on-scroll" id="attacks" aria-labelledby="attacks-title">
+          <div class="section-heading">
+            <div><p class="section-index">02 / LƯỢT TẤN CÔNG</p><h2 id="attacks-title">Hai tác nhân, cùng một bộ tấn công.</h2></div>
+            <p>Red được cấu hình mềm. Red Advance bổ sung lớp bảo vệ đầu vào, mô hình và đầu ra.</p>
+          </div>
+          <div class="agent-tabs" role="tablist" aria-label="Chọn tác nhân cần xem">
+            <button class="agent-tab active" id="tab-red" type="button" role="tab" aria-selected="true" aria-controls="attack-panel" data-target="red"><span class="tab-kicker">MÔ HÌNH MẶC ĐỊNH</span><span class="tab-name">Red <b id="red-tab-count">—</b></span></button>
+            <button class="agent-tab" id="tab-advance" type="button" role="tab" aria-selected="false" aria-controls="attack-panel" data-target="advance"><span class="tab-kicker">ĐỐI TƯỢNG BONUS · B2</span><span class="tab-name">Red Advance <b id="advance-tab-count">—</b></span></button>
+          </div>
+          <div class="attack-panel" id="attack-panel" role="tabpanel" aria-labelledby="tab-red">
+            <div class="attack-list" id="attack-list"><p class="empty-note">Chạy Checkpoint 4 để nạp danh sách tấn công.</p></div>
+            <div class="attack-detail" id="attack-detail">
+              <span class="small-label">LƯỢT TẤN CÔNG ĐANG CHỌN</span>
+              <h3 id="attack-title">Chưa chọn lượt tấn công</h3>
+              <p class="detail-subtitle" id="attack-layer">Kết quả đã ghi sẽ hiện tại đây.</p>
+              <div class="detail-divider"></div>
+              <span class="small-label">TRÍCH ĐOẠN PROMPT</span>
+              <p class="detail-text" id="attack-prompt">—</p>
+              <span class="small-label">PHẢN HỒI CỦA MÔ HÌNH</span>
+              <p class="detail-text response-text" id="attack-response">Phản hồi có giá trị demo được bảo vệ sẽ được ẩn trong giao diện này.</p>
+            </div>
+          </div>
+          <p class="bonus-note" id="bonus-note">B2 cần có lần lộ dữ liệu từ Red Advance và phải vượt qua lượt chấm lại. Giao diện này không tự cộng điểm.</p>
+        </section>
+
+        <section class="content-section report-section reveal-on-scroll" id="evidence" aria-labelledby="evidence-title">
+          <div class="section-heading">
+            <div><p class="section-index">03 / BẰNG CHỨNG NỘP BÀI</p><h2 id="evidence-title">Artifact đang ghi gì?</h2></div>
+            <p>Báo cáo kỹ thuật kiểm tra cấu trúc và schema. Bonus do hệ thống chấm của lớp quyết định sau khi chạy lại.</p>
+          </div>
+          <div class="report-grid">
+            <div class="report-main">
+              <div class="report-status"><span class="report-icon" aria-hidden="true">✓</span><div><span class="small-label">BÁO CÁO KỸ THUẬT</span><strong id="report-status">Đang chờ báo cáo chấm</strong></div></div>
+              <div class="report-meta"><div><span>NHÀ CUNG CẤP RED</span><strong id="provider-model">—</strong></div><div><span>MÔ HÌNH BLUE</span><strong id="blue-model">—</strong></div><div><span>THỜI ĐIỂM TẠO BÁO CÁO</span><strong id="report-date">—</strong></div></div>
+            </div>
+            <div class="file-ledger" aria-label="Các artifact bắt buộc">
+              <div class="file-ledger-header"><span>TỆP KẾT QUẢ</span><span>TRẠNG THÁI</span></div>
+              <div><code>results.json</code><span id="file-results">—</span></div>
+              <div><code>attack_results.json</code><span id="file-attacks">—</span></div>
+              <div><code>grade_report.json</code><span id="file-grade">—</span></div>
+            </div>
+          </div>
+          <div class="load-tools">
+            <div><strong>Cập nhật bằng chứng</strong><p>Mở giao diện qua máy chủ cục bộ hoặc chọn trực tiếp ba tệp JSON trên máy tính.</p></div>
+            <div class="load-actions"><button id="reload-button" type="button">Tải lại tệp</button><button class="import-button" id="import-button" type="button">Chọn tệp JSON</button><input id="artifact-files" type="file" accept=".json,application/json" multiple></div>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer"><span>VINBANK / NGÀY 11</span><span>Guardrails · Con người phê duyệt · AI có trách nhiệm</span><a href="../chat/">Mở phòng chat thử ↗</a></footer>
+    </div>
+  </body>
+</html>

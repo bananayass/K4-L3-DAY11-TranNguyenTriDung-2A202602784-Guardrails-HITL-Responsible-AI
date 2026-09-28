@@ -81,6 +81,9 @@ def detect_injection(user_input: str) -> InputStatus:
         r"\bact\s+as\s+(?:a\s+|an\s+)?unrestricted\b",
         r"\b(?:override|disregard|forget)\s+(?:all\s+)?(?:previous\s+)?instructions\b",
         r"\b(?:developer|system)\s+(?:message|instructions)\s*:",
+        r"\bbỏ\s+qua\s+(?:mọi\s+)?(?:chỉ\s+dẫn|hướng\s+dẫn)(?:\s+(?:trước\s+đó|trước\s+đây))?\b",
+        r"\b(?:tiết\s*lộ|cho\s+(?:tôi\s+)?xem|hiển\s*thị)\s+(?:cho\s+tôi\s+)?(?:mật\s*khẩu|api\s*key|khóa\s*api|system\s*prompt|chỉ\s*dẫn\s+hệ\s*thống)\b",
+        r"\b(?:đóng\s+vai|giả\s+vờ)\s+(?:là\s+)?(?:một\s+)?(?:trợ\s+lý\s+)?không\s+giới\s+hạn\b",
     ]
 
     normalized = _normalize_text(user_input)

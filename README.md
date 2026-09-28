@@ -149,3 +149,22 @@ pip install -r requirements.txt
 Rồi mở [`CHECKPOINTS.md`](CHECKPOINTS.md) và làm lần lượt Checkpoint 1 → 5.
 
 Nộp theo [`SUBMISSION.md`](SUBMISSION.md) · Quy định: [`RULES.md`](RULES.md).
+
+## Demo giao diện và phòng chat
+
+Phòng chat dùng guardrail CP2 Blue trước/sau mô hình OpenAI. Đây là UI thử nghiệm
+tách biệt với cấu hình chấm điểm Blue của lab (OpenRouter); Red / Red Advance vẫn
+là tác nhân red-team dành cho Checkpoint 4, không phải lựa chọn chatbot.
+
+Điền `OPENAI_API_KEY` trong `.env`, kích hoạt `.venv`, rồi chạy từ gốc repo:
+
+```bash
+.venv/bin/python chat/server.py
+```
+
+Mở [`http://localhost:8000/chat/`](http://localhost:8000/chat/) để trò chuyện.
+Backend giữ API key ở máy chủ, kiểm tra input bằng `detect_injection()` và
+`topic_filter()`, gọi OpenAI cho câu hợp lệ, rồi lọc output bằng `content_filter()`.
+Mô hình lấy từ `OPENAI_CHAT_MODEL`, hoặc `OPENAI_MODEL`, mặc định `gpt-4o-mini`.
+Trang demo artifact vẫn có tại [`http://localhost:8000/demo/`](http://localhost:8000/demo/).
+Không chạy `python3 -m http.server` cho chat vì lệnh đó không có API backend.
