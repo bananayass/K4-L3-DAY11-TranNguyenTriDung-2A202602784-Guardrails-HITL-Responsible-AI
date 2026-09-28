@@ -1,5 +1,20 @@
 # Day 11 — Controlled Agent Security (2026)
 
+**Bài nộp:** Tran Nguyen Tri Dung · MSSV `2A202602784`.
+
+Chạy từ gốc repo sau khi cài `requirements.txt` và cấu hình `.env` theo
+`.env.example`:
+
+```bash
+python src/main.py --part 2
+python src/main.py --part 3
+python src/main.py --part 4
+```
+
+Artifact bắt buộc được lệnh CP3 và CP4 sinh trong `outputs/`. OpenRouter hiện
+có thể trả 404 cho slug Blue mặc định; runtime chỉ thử lại endpoint `:free`
+của cùng model Liquid khi gặp lỗi đó. `results.json` ghi model thực tế đã dùng.
+
 > 👤 **Hình thức:** bài tập **cá nhân** (1 người / 1 MSSV).  
 > 🎯 **Mục tiêu:** xây **Blue** (phòng thủ), rồi red-team **Red** + **Red Advance**.  
 > ✅ Làm theo **Checkpoint 1 → 5** trong [`CHECKPOINTS.md`](CHECKPOINTS.md) · nộp theo [`SUBMISSION.md`](SUBMISSION.md).
